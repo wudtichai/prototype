@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: apps/v1beta2
+metadata:
+  name: prototype-deployment
+  labels:
+    app: prototype
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: prototype
+        role: backend
+        env: dev
+    spec:
+      containers:
+      - name: prototype
+        image: prototype-image
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 60
+        ports:
+        - name: prototype
+          containerPort: 8080
