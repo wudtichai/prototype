@@ -4,9 +4,16 @@ node {
   def imageTag = "gcr.io/${project}/${appName}:${env.POM_VERSION}-${env.BUILD_NUMBER}"
   def environment = 'dev'
 
-  stage('Run unittest') {
-    withMaven(maven: 'M3', mavenLocalRepo: 'prototype') {
+  stage('List all file') {
+    steps {
+      sh 'ls'
       sh 'pwd'
+    }
+  }
+
+  stage('Run unittest') {
+    withMaven(maven: 'M3') {
+      sh 'ls '
       sh 'mvn clean install package'
     }
   }
