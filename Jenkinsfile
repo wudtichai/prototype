@@ -5,6 +5,11 @@ node {
   def environment = 'dev'
 
   dir ("${appName}") {
+    stage('Check') {
+      sh 'pwd'
+      sh 'ls'
+    }
+
     stage('Run unittest') {
       withMaven(maven: 'M3') {
         sh 'mvn clean install package'
