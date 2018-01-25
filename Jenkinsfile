@@ -5,11 +5,6 @@ node {
   def environment = 'dev'
 
   checkout scm
-  
-  stage('Check') {
-    sh 'pwd'
-    sh 'ls'
-  }
 
   stage('Run unittest') {
     withMaven(maven: 'M3') {
@@ -18,7 +13,7 @@ node {
   }
 
   stage('Build image') {
-    sh 'docker build -t ${imageTag} .'
+    sh('docker build -t ${imageTag} .')
   }
   
   stage('Push image to registry') {
