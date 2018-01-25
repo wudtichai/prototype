@@ -4,34 +4,34 @@ node {
   def imageTag = "gcr.io/${project}/${appName}:${env.POM_VERSION}-${env.BUILD_NUMBER}"
   def environment = 'dev'
 
-  dir ("${appName}") {
-    stage('Check') {
-      sh 'pwd'
-      sh 'ls'
-    }
+  checkout scm
+  
+  stage('Check') {
+    sh 'pwd'
+    sh 'ls'
+  }
 
-    stage('Run unittest') {
-      withMaven(maven: 'M3') {
-        sh 'mvn clean install package'
-      }
+  stage('Run unittest') {
+    withMaven(maven: 'M3') {
+      sh 'mvn clean install package'
     }
+  }
 
-    stage('Build image') {
-      sh 'docker build -t ${imageTag} .'
-    }
-    
-    stage('Push image to registry') {
-      sh("gcloud docker -- push ${imageTag}")
-    }
+  stage('Build image') {
+    sh 'docker build -t ${imageTag} .'
+  }
+  
+  stage('Push image to registry') {
+    sh("gcloud docker -- push ${imageTag}")
+  }
 
-    stage('Deploy Application') {
-      // Create namespace if it doesn't exist
-      sh("kubectl get ns ${environment} || kubectl create ns ${environment}")
-      // Don't use public load balancing for development branches
-      sh("sed -i.bak 's#${appName}-image#${imageTag}#' ./k8s/${environment}/*yaml")
-      sh("kubectl --namespace=${environment} apply -f k8s/${environment}/")
-      echo 'To access your environment run `kubectl proxy`'
-      echo "Then access your service via http://localhost:8001/api/v1/proxy/namespaces/${environment}/services/${appName}:8080/"
-    }
+  stage('Deploy Application') {
+    // Create namespace if it doesn't exist
+    sh("kubectl get ns ${environment} || kubectl create ns ${environment}")
+    // Don't use public load balancing for development branches
+    sh("sed -i.bak 's#${appName}-image#${imageTag}#' ./k8s/${environment}/*yaml")
+    sh("kubectl --namespace=${environment} apply -f k8s/${environment}/")
+    echo 'To access your environment run `kubectl proxy`'
+    echo "Then access your service via http://localhost:8001/api/v1/proxy/namespaces/${environment}/services/${appName}:8080/"
   }
 }
