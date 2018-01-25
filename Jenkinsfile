@@ -5,8 +5,7 @@ node {
   def environment = 'dev'
 
   stage('Run unittest') {
-    withMaven(maven: 'M3') {
-      sh 'ls'
+    withMaven(maven: 'M3', mavenLocalRepo: '') {
       sh 'mvn clean install package'
     }
   }
