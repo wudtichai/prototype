@@ -4,17 +4,12 @@ node {
   def imageTag = "gcr.io/${project}/${appName}:${env.POM_VERSION}-${env.BUILD_NUMBER}"
   def environment = 'dev'
 
-  agent {
-    docker {
-      image 'maven:3-alpine'
-      args '-v /root/.m2:/root/.m2'
-    }
-  }
-
   stages {
     stage('Build image') {
+      withMaven(maven: 'M3') {
+        sh "mvn clean install package"
+      }
       steps {
-        sh 'mvn clean install package'
         sh 'docker build -t ${imageTag} .'
       }
     }
