@@ -1,7 +1,6 @@
 node {
   def project = 'development-191208'
   def appName = 'prototype'
-  def imageTag = "gcr.io/${project}/${appName}:${env.POM_VERSION}-${env.BUILD_NUMBER}"
   def environment = 'dev'
 
   checkout scm
@@ -11,6 +10,8 @@ node {
       sh 'mvn clean install package'
     }
   }
+
+  def imageTag = "gcr.io/${project}/${appName}:${env.POM_VERSION}-${env.BUILD_NUMBER}"
 
   stage('Build image') {
     sh("docker build -t ${imageTag} .")
