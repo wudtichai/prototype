@@ -13,7 +13,7 @@ node {
   }
 
   stage('Build image') {
-    sh('docker build -t ${imageTag} .')
+    sh("docker build -t ${imageTag} .")
   }
   
   stage('Push image to registry') {
