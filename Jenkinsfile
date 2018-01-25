@@ -6,9 +6,7 @@ node {
   checkout scm
 
   stage('Run unittest') {
-    withMaven(maven: 'M3') {
-      sh 'mvn clean install package'
-    }
+    sh 'mvn clean install package'
   }
 
   def imageTag = "gcr.io/${project}/${appName}:${env.POM_VERSION}-${env.BUILD_NUMBER}"
