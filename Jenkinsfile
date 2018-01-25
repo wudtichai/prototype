@@ -5,10 +5,8 @@ node {
   def environment = 'dev'
 
   stage('List all file') {
-    steps {
-      sh 'ls'
-      sh 'pwd'
-    }
+    sh 'ls'
+    sh 'pwd'
   }
 
   stage('Run unittest') {
@@ -19,26 +17,20 @@ node {
   }
 
   stage('Build image') {
-    steps {
-      sh 'docker build -t ${imageTag} .'
-    }
+    sh 'docker build -t ${imageTag} .'
   }
   
   stage('Push image to registry') {
-    steps {
-      sh("gcloud docker -- push ${imageTag}")
-    }
+    sh("gcloud docker -- push ${imageTag}")
   }
 
   stage('Deploy Application') {
-    steps {
-      // Create namespace if it doesn't exist
-      sh("kubectl get ns ${environment} || kubectl create ns ${environment}")
-      // Don't use public load balancing for development branches
-      sh("sed -i.bak 's#${appName}-image#${imageTag}#' ./k8s/${environment}/*yaml")
-      sh("kubectl --namespace=${environment} apply -f k8s/${environment}/")
-      echo 'To access your environment run `kubectl proxy`'
-      echo "Then access your service via http://localhost:8001/api/v1/proxy/namespaces/${environment}/services/${appName}:8080/"
-    }
+    // Create namespace if it doesn't exist
+    sh("kubectl get ns ${environment} || kubectl create ns ${environment}")
+    // Don't use public load balancing for development branches
+    sh("sed -i.bak 's#${appName}-image#${imageTag}#' ./k8s/${environment}/*yaml")
+    sh("kubectl --namespace=${environment} apply -f k8s/${environment}/")
+    echo 'To access your environment run `kubectl proxy`'
+    echo "Then access your service via http://localhost:8001/api/v1/proxy/namespaces/${environment}/services/${appName}:8080/"
   }
 }
