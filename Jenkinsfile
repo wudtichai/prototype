@@ -4,10 +4,14 @@ node {
   def imageTag = "gcr.io/${project}/${appName}:${env.POM_VERSION}-${env.BUILD_NUMBER}"
   def environment = 'dev'
 
-  stage('Build image') {
+  stage('Run unittest') {
     withMaven(maven: 'M3') {
-      sh "mvn clean install package"
+      sh 'ls'
+      sh 'mvn clean install package'
     }
+  }
+
+  stage('Build image') {
     steps {
       sh 'docker build -t ${imageTag} .'
     }
