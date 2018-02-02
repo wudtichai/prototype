@@ -26,7 +26,7 @@ pipeline {
                 script {
                     def project = 'development-191208'
                     def appName = 'prototype'
-                    def credentialsId = 'development-191208'
+                    def credentialsId = 'development-191208-grc-credectials'
                     
                     checkout scm
                     docker.withRegistry("https://gcr.io", "gcr:${credentialsId}") {
