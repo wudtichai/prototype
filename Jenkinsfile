@@ -26,14 +26,13 @@ pipeline {
                 script {
                     def project = 'development-191208'
                     def appName = 'prototype'
-                    def registryServer = "gcr.io/${project}/${appName}"
                     def credentialsId = 'development-191208'
                     
                     checkout scm
-                    docker.withRegistry("${registryServer}", "${credentialsId}") {
-                        def customImage = docker.build("${appName}:dev-${env.BUILD_ID}")
+                    docker.withRegistry("https://gcr.io", "gcr:${credentialsId}") {
+                        def customImage = docker.build("${project}/${appName}")
                         /* Push the container to the custom Registry */
-                        customImage.push()
+                        customImage.push("dev-${env.BUILD_ID}")
                     }
                 }
             }
