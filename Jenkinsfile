@@ -1,15 +1,13 @@
 pipeline {
     agent any
+    tools { 
+        maven 'Maven 3.3.9' 
+        jdk 'jdk8' 
+    }
     stages {
         stage('Build') { 
-            agent {
-                docker {
-                    image 'maven:3-alpine' 
-                    args '-v /var/jenkins_home/.m2:/root/.m2' 
-                }
-            }
             steps {
-                sh 'mvn -B clean package'      
+                sh 'mvn -B clean package'
             }
             post {
                 always {
@@ -17,6 +15,22 @@ pipeline {
                 }
             }
         }
+        // stage('Build') { 
+        //     agent {
+        //         docker {
+        //             image 'maven:3-alpine' 
+        //             args '-v /var/jenkins_home/.m2:/root/.m2' 
+        //         }
+        //     }
+        //     steps {
+        //         sh 'mvn -B clean package'      
+        //     }
+        //     post {
+        //         always {
+        //             junit 'target/surefire-reports/*.xml'
+        //         }
+        //     }
+        // }
         stage('Push Image') { 
             steps {
                 sh 'pwd'
