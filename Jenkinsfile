@@ -22,8 +22,8 @@ pipeline {
             }
         }
         stage('Build Docker Image') { 
-            node {
-                steps {
+            steps {
+                node {
                     checkout scm
                     def project = 'development-191208'
                     def appName = 'prototype'
