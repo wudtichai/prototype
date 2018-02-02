@@ -13,7 +13,8 @@ pipeline {
             }
             post {
                 success {
-                    sh 'cp -r target/prototype.jar ../workspace/target/prototype.jar'  
+                    sh 'pwd'  
+                    // sh 'cp -r target/prototype.jar ../workspace/target/prototype.jar'  
                 }
                 always {
                     junit 'target/surefire-reports/*.xml'
