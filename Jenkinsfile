@@ -23,18 +23,16 @@ pipeline {
         }
         stage('Build Docker Image') { 
             steps {
-                node {
-                    checkout scm
-                    def project = 'development-191208'
-                    def appName = 'prototype'
-                    def registryServer = "gcr.io/${project}/${appName}"
-                    def credentialsId = 'development-191208'
+                checkout scm
+                def project = 'development-191208'
+                def appName = 'prototype'
+                def registryServer = "gcr.io/${project}/${appName}"
+                def credentialsId = 'development-191208'
 
-                    docker.withRegistry("${registryServer}", "${credentialsId}") {
-                        def customImage = docker.build("${appName}:dev-${env.BUILD_ID}")
-                        /* Push the container to the custom Registry */
-                        customImage.push()
-                    }
+                docker.withRegistry("${registryServer}", "${credentialsId}") {
+                    def customImage = docker.build("${appName}:dev-${env.BUILD_ID}")
+                    /* Push the container to the custom Registry */
+                    customImage.push()
                 }
             }
         }
