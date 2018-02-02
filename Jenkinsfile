@@ -6,8 +6,8 @@ pipeline {
         }
     }
     stages {
-        ws("/var/jenkins_workspaces/prototype"){
-            stage('Build') { 
+        stage('Build') { 
+            ws("/var/jenkins_workspaces/prototype"){
                 steps {
                     sh 'mvn -B -DskipTests clean package'
                 }
