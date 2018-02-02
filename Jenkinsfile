@@ -22,6 +22,7 @@ pipeline {
             }
         }
         stage('Build Docker Image') { 
+            agent none
             steps {
                 script {
                     def project = 'development-191208'
