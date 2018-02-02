@@ -13,8 +13,7 @@ pipeline {
             }
             post {
                 success {
-                    sh 'pwd'  
-                    // sh 'cp -r target/prototype.jar ../workspace/target/prototype.jar'  
+                    sh 'cp -r target ../workspace/target'  
                 }
                 always {
                     junit 'target/surefire-reports/*.xml'
@@ -23,7 +22,6 @@ pipeline {
         }
         stage('Push Image') { 
             steps {
-                sh 'pwd'
                 script {
                     def project = 'development-191208'
                     def appName = 'prototype'
