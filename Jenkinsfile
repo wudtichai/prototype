@@ -19,6 +19,7 @@ pipeline {
         }
         stage('Push Image') { 
             steps {
+                sh 'pwd'
                 script {
                     def project = 'development-191208'
                     def appName = 'prototype'
